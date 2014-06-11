@@ -123,7 +123,7 @@
     <Compile Include="CodeIssues\IssueMarker.cs" />
     <Compile Include="CodeIssues\DiagnosticFactory.cs" />
     <Compile Include="CodeActions\UseVarKeywordAction.cs" />
-    <Compile Include="CodeActions\NRefactoryCodeRefactoringProviderAttribute.cs" />
+    <Compile Include="NRefactoryCodeRefactoringProviderAttribute.cs" />
     <Compile Include="CodeActions\UseExplicitTypeAction.cs" />
     <Compile Include="CodeActions\ConvertDecToHexAction.cs" />
     <Compile Include="CodeActions\ConvertHexToDecAction.cs" />
@@ -136,7 +136,7 @@
     <Compile Include="CodeActions\ConvertHasFlagsToBitwiseFlagComparisonAction.cs" />
     <Compile Include="CodeActions\ConvertBitwiseFlagComparisonToHasFlagsAction.cs" />
     <Compile Include="CodeIssues\Synced\RedundanciesInCode\ForStatementConditionIsTrueIssue.cs" />
-    <Compile Include="CodeActions\NRefactoryCodeDiagnosticAnalyzerAttribute.cs" />
+    <Compile Include="NRefactoryCodeDiagnosticAnalyzerAttribute.cs" />
     <Compile Include="CodeIssues\GatherVisitorBase.cs" />
     <Compile Include="CodeIssues\Synced\RedundanciesInCode\RedundantThisQualifierIssue.cs" />
     <Compile Include="CodeIssues\Synced\RedundanciesInCode\RedundantBaseQualifierIssue.cs" />
