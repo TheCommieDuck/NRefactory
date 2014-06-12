@@ -23,9 +23,51 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class ConvertPropertyToMethodTests
+    [TestFixture]
+    public class ConvertPropertyToMethodTests : ContextActionTestBase
     {
+        //getter
+        //setter
+        //getter and setter
+        //private
+        //protected
+        [Test]
+        public void TestGetter()
+        {
+
+        }
+
+        [Test]
+        public void TestSetter()
+        {
+
+        }
+
+        [Test]
+        public void TestGetterAndSetter()
+        {
+
+        }
+
+        [Test]
+        public void TestPrivate()
+        {
+
+        }
+
+        [Test]
+        public void TestProtected()
+        {
+
+        }
+
+        [Test]
+        public void IgnoreAutoProperty()
+        {
+
+        }
     }
 }

@@ -24,9 +24,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class ConvertAutoPropertyToPropertyTests
+    [TestFixture]
+    public class ConvertAutoPropertyToPropertyTests : ContextActionTestBase
     {
+        //simple auto property
+        //auto property where generated member is already used
+
+        [Test]
+        public void SimpleProperty()
+        {
+
+        }
+
+        [Test]
+
+        public void MemberToGenerateAlreadyExists()
+        {
+
+        }
     }
 }

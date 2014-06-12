@@ -24,9 +24,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class MoveClassIntoNamespaceTests
+    [TestFixture]
+    public class MoveClassIntoNamespaceTests : ContextActionTestBase
     {
+        //move into namespace
+        //move into nested namespace
+        [Test]
+        public void TestMoveIntoNamespace()
+        {
+
+        }
+
+        [Test]
+        public void TestMoveIntoNestedNamespace()
+        {
+
+        }
     }
 }

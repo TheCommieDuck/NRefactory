@@ -24,14 +24,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using ICSharpCode.NRefactory6.CSharp.CodeActions;
 using NUnit.Framework;
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
     [TestFixture]
     public class AddAbstractModifierToBodiedMethodTests : ContextActionTestBase
     {
-        //
+        //ignore methods in non-abstract classes
+        //parameterless method
+        //method with parameters
+
+        [Test]
+        public void IgnoreNonAbstractClass()
+        {
+
+        }
+
+        [Test]
+        public void TestSimpleMethod()
+        {
+
+        }
+
+        [Test]
+        public void TestSimpleParameter()
+        {
+
+        }
     }
 }

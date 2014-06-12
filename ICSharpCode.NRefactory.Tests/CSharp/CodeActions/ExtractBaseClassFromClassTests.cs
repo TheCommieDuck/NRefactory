@@ -24,9 +24,52 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class ExtractBaseClassFromClassTests
+    [TestFixture]
+    public class ExtractBaseClassFromClassTests : ContextActionTestBase
     {
+        //ignore empty class
+        //private members
+        //public and private members
+        //methods
+        //indexers
+
+        [Test]
+        public void IgnoreEmptyClass()
+        {
+
+        }
+
+        [Test]
+        public void TestPrivateMembers()
+        {
+
+        }
+
+        [Test]
+        public void TestPublicMembers()
+        {
+
+        }
+
+        [Test]
+        public void TestMethods()
+        {
+
+        }
+
+        [Test]
+        public void TestIndexers()
+        {
+
+        }
+
+        [Test]
+        public void TestProperties()
+        {
+
+        }
     }
 }

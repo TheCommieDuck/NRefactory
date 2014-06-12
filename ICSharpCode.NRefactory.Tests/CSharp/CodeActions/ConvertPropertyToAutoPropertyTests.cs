@@ -24,9 +24,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class ConvertPropertyToAutoPropertyTests
+    [TestFixture]
+    public class ConvertPropertyToAutoPropertyTests : ContextActionTestBase
     {
+        //ignore properties with logic in them
+        //get only
+        //set only
+        //get and set
+        //member variable referenced elsewhere in class
+        [Test]
+        public void IgnorePropertiesWithAdditionalLogic()
+        {
+
+        }
+
+        [Test]
+        public void TestGetter()
+        {
+
+        }
+
+        [Test]
+        public void TestSetter()
+        {
+
+        }
+
+        [Test]
+        public void TestGetterAndSetter()
+        {
+
+        }
+
+        [Test]
+        public void TestUnderlyingMemberReferenced()
+        {
+
+        }
+
     }
 }

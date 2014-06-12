@@ -24,9 +24,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class AddNewModifierToMethodTests
+    [TestFixture]
+    public class AddNewModifierToMethodTests : ContextActionTestBase
     {
+        //ignore non-derived classes
+        //ignore non-hiding methods (so where it's not needed)
+        //simple method
+        //method with parameters
+
+        [Test]
+        public void IgnoreNonDerivedClass()
+        {
+
+        }
+
+        [Test]
+        public void IgnoreNonHidingMethod()
+        {
+
+        }
+
+        [Test]
+        public void SimpleMethod()
+        {
+
+        }
+
+        [Test]
+        public void MethodWithParameters()
+        {
+
+        }
     }
+
 }

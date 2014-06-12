@@ -24,9 +24,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class AddPartialModifierToMethodTests
+    [TestFixture]
+    public class AddPartialModifierToMethodTests : ContextActionTestBase
     {
+        //ignore non-partial class
+        //simple method
+        //not entirely sure about this one
+
+        [Test]
+        public void IgnoreNonPartialClass()
+        {
+
+        }
+
+        [Test]
+        public void SimpleMethod()
+        {
+
+        }
     }
 }

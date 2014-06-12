@@ -24,9 +24,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class ChangeParameterOrderTests
+    [TestFixture]
+    public class ChangeParameterOrderTests : ContextActionTestBase
     {
+        //not firing on parameterless methods
+        //not firing on 1 parameter
+        //works with 2 parameters
+        //multiple (many) parameters
+
+        [Test]
+        public void IgnoreParameterlessMethod()
+        {
+
+        }
+
+        [Test]
+        public void IgnoreSingleParameterMethod()
+        {
+
+        }
+
+        [Test]
+        public void TestSimpleMethod()
+        {
+
+        }
+
+        [Test]
+
+        public void TestMultipleParameterMethod()
+        {
+
+        }
     }
 }

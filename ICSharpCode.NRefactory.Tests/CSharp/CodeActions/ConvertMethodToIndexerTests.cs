@@ -24,9 +24,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace ICSharpCode.NRefactory.CSharp.CodeActions
+using NUnit.Framework;
+namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
-    class ConvertMethodToIndexerTests
+    [TestFixture]
+    public class ConvertMethodToIndexerTests : ContextActionTestBase
     {
+        //will need to think, comparing get and set
     }
 }
