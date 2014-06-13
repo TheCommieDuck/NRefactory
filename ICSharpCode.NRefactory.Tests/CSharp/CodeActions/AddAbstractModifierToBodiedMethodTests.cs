@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using NUnit.Framework;
+using ICSharpCode.NRefactory6.CSharp.Refactoring;
 
 namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
@@ -38,7 +39,6 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
         [Test]
         public void IgnoreNonAbstractClass()
         {
-
         }
 
         [Test]

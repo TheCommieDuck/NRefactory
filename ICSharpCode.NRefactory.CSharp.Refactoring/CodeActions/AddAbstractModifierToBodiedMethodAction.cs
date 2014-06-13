@@ -38,14 +38,14 @@ using ICSharpCode.NRefactory6.CSharp.Refactoring;
 using Microsoft.CodeAnalysis.CSharp;
 using ICSharpCode.NRefactory6.CSharp;
 
-namespace ICSharpCode.NRefactory.CSharp.Refactoring
+namespace ICSharpCode.NRefactory6.CSharp.Refactoring
 {
     /// <summary>
     /// Converts a method in an abstract class to an abstract method.
     /// </summary>
     [NRefactoryCodeRefactoringProvider(Description = "Convert method to an abstract method, preserving the method body.")]
     [ExportCodeRefactoringProvider("Convert method to an abstract method, preserving the method body.", LanguageNames.CSharp)]
-    public class AddAbstractModifierToBodiedMethodsAction : ICodeRefactoringProvider
+    public class AddAbstractModifierToBodiedMethodAction : ICodeRefactoringProvider
     {
         public Task<IEnumerable<CodeAction>> GetRefactoringsAsync(Document document, TextSpan span, CancellationToken cancellationToken)
         {

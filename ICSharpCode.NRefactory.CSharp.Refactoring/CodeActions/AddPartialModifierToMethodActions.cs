@@ -36,7 +36,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ICSharpCode.NRefactory.CSharp.Refactoring
+namespace ICSharpCode.NRefactory6.CSharp.Refactoring
 {
     /// <summary>
     /// Add the partial modifier to a method in a partial class.

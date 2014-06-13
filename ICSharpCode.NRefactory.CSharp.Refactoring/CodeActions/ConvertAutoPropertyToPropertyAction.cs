@@ -37,7 +37,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace ICSharpCode.NRefactory.CSharp.Refactoring
+namespace ICSharpCode.NRefactory6.CSharp.Refactoring
 {
     /// <summary>
     /// Converts a auto-property to a property.

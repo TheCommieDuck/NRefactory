@@ -101,7 +101,7 @@
     <Compile Include="CodeActions\AddPartialModifierToMethodActions.cs" />
     <Compile Include="CodeActions\AddStaticModifierToMethodAction.cs" />
     <Compile Include="CodeActions\ChangeParameterOrderAction.cs" />
-    <Compile Include="CodeActions\AddAbstractModifierToBodiedMethodsAction.cs" />
+    <Compile Include="CodeActions\AddAbstractModifierToBodiedMethodAction.cs" />
     <Compile Include="CodeActions\AddNewModifierToMethodAction.cs" />
     <Compile Include="CodeActions\ConvertAnonymousClassToClassAction.cs" />
     <Compile Include="CodeActions\ConvertAutoPropertyToPropertyAction.cs" />

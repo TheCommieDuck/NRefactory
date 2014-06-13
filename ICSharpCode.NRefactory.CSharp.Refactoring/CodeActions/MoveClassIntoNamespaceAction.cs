@@ -37,7 +37,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace ICSharpCode.NRefactory.CSharp.Refactoring
+namespace ICSharpCode.NRefactory6.CSharp.Refactoring
 {
     /// <summary>
     /// Move a class into a different namespace.
