@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using ICSharpCode.NRefactory6.CSharp.Refactoring;
 using NUnit.Framework;
 
 namespace ICSharpCode.NRefactory6.CSharp.CodeActions
@@ -39,26 +40,106 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
         [Test]
         public void IgnoreParameterlessMethod()
         {
-
+            TestWrongContext<ChangeParameterOrderAction>(@"
+class Foo
+{
+    public $Bar()
+    {
+    }
+}
+");
         }
 
         [Test]
         public void IgnoreSingleParameterMethod()
         {
-
+            TestWrongContext<ChangeParameterOrderAction>(@"
+class Foo
+{
+    public $Bar(int foo)
+    {
+    }
+}
+");
         }
 
         [Test]
+        //TODO: consider using some kind of mockup here?
         public void TestSimpleMethod()
         {
+            Test<ChangeParameterOrderAction>(@"
+class Foo
+{
+    public $Bar(int foo, System.String bar)
+    {
+    }
+}
 
+class Bar
+{
+    public Bar()
+    {
+        Foo foo = new Foo();
+        foo(30, ""string"");
+    }
+}
+", @"
+class Foo
+{
+    public Bar(System.String bar, int foo)
+    {
+    }
+}
+
+class Bar
+{
+    public Bar()
+    {
+        Foo foo = new Foo();
+        foo(""string"", 30);
+    }
+}
+");
         }
 
         [Test]
 
         public void TestMultipleParameterMethod()
         {
+            //TODO: consider mockup
+            Test<ChangeParameterOrderAction>(@"
+class Foo
+{
+    public $Bar(int foo, System.String bar, bool bar)
+    {
+    }
+}
 
+class Bar
+{
+    public Bar()
+    {
+        Foo foo = new Foo();
+        foo(30, ""string"", true);
+    }
+}
+", @"
+class Foo
+{
+    public Bar(System.String bar, bool bar, int foo)
+    {
+    }
+}
+
+class Bar
+{
+    public Bar()
+    {
+        Foo foo = new Foo();
+        foo(""string"", true, 30);
+    }
+}
+");
         }
     }
 }

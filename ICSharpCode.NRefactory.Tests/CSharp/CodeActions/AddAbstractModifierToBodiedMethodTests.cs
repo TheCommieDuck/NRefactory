@@ -26,6 +26,7 @@
 
 using NUnit.Framework;
 using ICSharpCode.NRefactory6.CSharp.Refactoring;
+using System;
 
 namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
@@ -39,18 +40,71 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
         [Test]
         public void IgnoreNonAbstractClass()
         {
+            TestWrongContext<AddAbstractModifierToBodiedMethodAction>(@"
+class Foo
+{
+    public int $Bar(int baz)
+    {
+        return baz;
+    }
+}
+");
         }
 
         [Test]
         public void TestSimpleMethod()
         {
+            Test<AddAbstractModifierToBodiedMethodAction>(@"
+abstract class Foo
+{
+    private int baz;
 
+    public int $Bar()
+    {
+        baz += 5;
+        return baz;
+    }
+}
+", @"
+
+abstract class Foo
+{
+    private int baz;
+
+    /* 
+        baz += 5;
+        return baz;
+    */
+    public abstract int Bar();
+}
+");
         }
 
         [Test]
         public void TestSimpleParameter()
         {
+            Test<AddAbstractModifierToBodiedMethodAction>(@"
+abstract class Foo
+{
+    public int $Bar(int baz)
+    {
+        baz += 5;
+        return baz;
+    }
+}
+", @"
 
+abstract class Foo
+{
+    private int baz;
+
+    /* 
+        baz += 5;
+        return baz;
+    */
+    public abstract int Bar(int baz);
+}
+");
         }
     }
 }

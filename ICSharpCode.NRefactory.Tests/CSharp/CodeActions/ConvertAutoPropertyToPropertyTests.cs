@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using ICSharpCode.NRefactory6.CSharp.Refactoring;
 using NUnit.Framework;
 
 namespace ICSharpCode.NRefactory6.CSharp.CodeActions
@@ -37,14 +38,61 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
         [Test]
         public void SimpleProperty()
         {
+            Test<ConvertAutoPropertyToPropertyAction>(@"
+class Foo
+{
+    public int $Prop { get; set; }
+}
+", @"
+class Foo
+{
+    public int Prop 
+    {
+        get
+        {
+            return prop;
+        }
+        set
+        {
+            prop = value;
+        }
+    }
 
+    private int prop;
+}
+");
         }
 
         [Test]
 
         public void MemberToGenerateAlreadyExists()
         {
+            Test<ConvertAutoPropertyToPropertyAction>(@"
+class Foo
+{
+    public int $Prop { get; set; }
 
+    private int prop;
+}
+", @"
+class Foo
+{
+    public int Prop 
+    {
+        get
+        {
+            return prop_;
+        }
+        set
+        {
+            prop_ = value;
+        }
+    }
+
+    private int prop_;
+    private int prop;
+}
+");
         }
     }
 }

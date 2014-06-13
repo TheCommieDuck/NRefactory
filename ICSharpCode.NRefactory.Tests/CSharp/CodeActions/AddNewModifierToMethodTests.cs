@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using ICSharpCode.NRefactory6.CSharp.Refactoring;
 using NUnit.Framework;
 
 namespace ICSharpCode.NRefactory6.CSharp.CodeActions
@@ -39,25 +40,100 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
         [Test]
         public void IgnoreNonDerivedClass()
         {
-
+            TestWrongContext<AddNewModifierToMethodAction>(@"
+class Foo
+{
+    public void $Bar()
+    {
+    }
+}
+");
         }
 
         [Test]
         public void IgnoreNonHidingMethod()
         {
+            TestWrongContext<AddNewModifierToMethodAction>(@"
+class Foo
+{
+    public virtual void Bar()
+    {
+    }
+}
 
+class Baz : Foo
+{
+    public void $Bar_()
+    {
+    }
+}
+");
         }
 
         [Test]
         public void SimpleMethod()
         {
+            Test<AddNewModifierToMethodAction>(@"
+class Foo
+{
+    public virtual void Bar()
+    {
+    }
+}
 
+class Baz : Foo
+{
+    public void $Bar_()
+    {
+    }
+}
+", @"
+class Foo
+{
+    public virtual void Bar()
+    {
+    }
+}
+
+class Baz : Foo
+{
+    public new void Bar_()
+    {
+    }
+}");
         }
 
         [Test]
         public void MethodWithParameters()
         {
+            Test<AddNewModifierToMethodAction>(@"
+class Foo
+{
+    public virtual void Bar(int testParam)
+    {
+    }
+}
 
+class Baz : Foo
+{
+    public void $Bar_(int testParam)
+    {
+    }
+}
+", @"
+class Foo
+{
+    public virtual void Bar(int testParam)
+    {
+    }
+}
+
+class Baz : Foo
+{
+    public new void Bar_(int testParam)
+    {
+    }
+}");
         }
     }
 

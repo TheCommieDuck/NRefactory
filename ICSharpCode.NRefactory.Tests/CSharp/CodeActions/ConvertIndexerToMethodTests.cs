@@ -1,4 +1,5 @@
-﻿//
+﻿using ICSharpCode.NRefactory6.CSharp.Refactoring;
+//
 // ConvertIndexerToMethodTests.cs
 //
 // Author:
@@ -30,33 +31,158 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
     [TestFixture]
     public class ConvertIndexerToMethodTests : ContextActionTestBase
     {
-        //simple indexer
         //get
         //set
         //get AND set
 
         [Test]
-        public void SimpleIndexer()
-        {
-
-        }
-
-        [Test]
+        //TODO: MOCKUP
         public void TestGetIndexer()
         {
+            Test<ConvertIndexerToMethodAction>(@"
+class Foo
+{
+    private int bar;
 
+    public int $this[int index]
+    {
+        get
+        {
+            return bar+index;
+        }
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        int bar = foo[4];
+    }
+}
+", @"
+class Foo
+{
+    public int GetBar(int index)
+    {
+        return bar+index;
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        int bar = foo.GetBar(4);
+    }
+}
+");
         }
 
         [Test]
         public void TestSetIndexer()
         {
+            Test<ConvertIndexerToMethodAction>(@"
+class Foo
+{
+    private int bar;
 
+    public int $this[int index]
+    {
+        set
+        {
+            bar = index;
+        }
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        foo[4] = 5;
+    }
+}
+", @"
+class Foo
+{
+    private int bar;
+
+    public int SetBar(int index, int value)
+    {
+        bar = index;
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        foo.SetBar(4, 5);
+    }
+}
+");
         }
 
         [Test]
         public void TestGetAndSetIndexer()
         {
+            Test<ConvertIndexerToMethodAction>(@"
+class Foo
+{
+    private int bar;
 
+    public int $this[int index]
+    {
+        get
+        {
+            return bar+index;
+        }
+
+        set
+        {
+            bar = index;
+        }
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        foo[4] = 5;
+        int bar = foo[4];
+    }
+}
+", @"
+class Foo
+{
+    public int GetBar(int index)
+    {
+        return bar+index;
+    }
+
+    public int SetBar(int index, int value)
+    {
+        bar = index;
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        foo.SetBar(4, 5);
+        int bar = foo.GetBar(4);
+    }
+}
+");
         }
     }
 }
