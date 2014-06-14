@@ -24,12 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using ICSharpCode.NRefactory6.CSharp.Refactoring;
 using NUnit.Framework;
 namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
     [TestFixture]
     public class ExtractBaseClassFromClassTests : ContextActionTestBase
     {
+        //NEEDS MOCUKUP
         //ignore empty class
         //private members
         //public and private members
@@ -39,13 +41,16 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
         [Test]
         public void IgnoreEmptyClass()
         {
-
+            TestWrongContext<ExtractBaseClassFromClassAction>(@"
+class $Foo
+{
+}
+");
         }
 
         [Test]
         public void TestPrivateMembers()
         {
-
         }
 
         [Test]

@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using ICSharpCode.NRefactory6.CSharp.Refactoring;
 using NUnit.Framework;
 namespace ICSharpCode.NRefactory6.CSharp.CodeActions
 {
@@ -38,32 +39,132 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
         [Test]
         public void IgnorePropertiesWithAdditionalLogic()
         {
-
+            TestWrongContext<ConvertPropertyToAutoPropertyAction>(@"
+class Foo
+{
+    public int $Bar
+    {
+        get
+        {
+            int bar = 5;
+            return baz+bar;
+        }
+    }
+    private int bar;
+}
+");
         }
 
         [Test]
         public void TestGetter()
         {
+            Test<ConvertPropertyToAutoPropertyAction>(@"
+class Foo
+{
+    public int $Bar
+    {
+        get
+        {
+            return bar;
+        }
+    }
 
+    private int bar;
+}
+", @"
+class Foo
+{
+    public int Bar { get; }
+}");
         }
 
         [Test]
         public void TestSetter()
         {
+            Test<ConvertPropertyToAutoPropertyAction>(@"
+class Foo
+{
+    public int $Bar
+    {
+        set
+        {
+            bar = value;
+        }
+    }
 
+    private int bar;
+}
+", @"
+class Foo
+{
+    public int Bar { set; }
+}");
         }
 
         [Test]
         public void TestGetterAndSetter()
         {
+            Test<ConvertPropertyToAutoPropertyAction>(@"
+class Foo
+{
+    public int $Bar
+    {
+        get
+        {
+            return bar;
+        }
 
+        set
+        {
+            bar = value;
+        }
+    }
+
+    private int bar;
+}
+", @"
+class Foo
+{
+    public int Bar { get; set; }
+}");
         }
 
         [Test]
         public void TestUnderlyingMemberReferenced()
         {
-
+            Test<ConvertPropertyToAutoPropertyAction>(@"
+class Foo
+{
+    public int $Bar
+    {
+        get
+        {
+            return bar;
         }
 
+        set
+        {
+            bar = value;
+        }
+    }
+
+    private int bar;
+
+    public void Baz()
+    {
+        int b = bar;
+    }
+}
+", @"
+class Foo
+{
+    public int Bar { get; set; }
+
+    public void Baz()
+    {
+        int b = Bar;
+    }
+}");
+        }
     }
 }

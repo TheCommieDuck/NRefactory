@@ -29,6 +29,7 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
     [TestFixture]
     public class MoveInterfaceIntoNamespaceTests : ContextActionTestBase
     {
+        //NEEDS MOCKUP
         //move into namespace
         //move into nested namespace
         [Test]

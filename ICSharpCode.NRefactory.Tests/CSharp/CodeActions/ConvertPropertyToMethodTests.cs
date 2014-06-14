@@ -1,4 +1,5 @@
-﻿//
+﻿using ICSharpCode.NRefactory6.CSharp.Refactoring;
+//
 // ConvertPropertyToMethodTests.cs
 //
 // Author:
@@ -32,42 +33,163 @@ namespace ICSharpCode.NRefactory6.CSharp.CodeActions
         //getter
         //setter
         //getter and setter
-        //private
-        //protected
+        //ignore autoproperty
         [Test]
-        public void TestGetter()
+                public void TestGet()
         {
+            Test<ConvertPropertyToMethodAction>(@"
+class Foo
+{
+    private int bar;
 
+    public int $Bar
+    {
+        get
+        {
+            return bar+5;
+        }
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        int bar = foo.Bar;
+    }
+}
+", @"
+class Foo
+{
+    public int GetBar(int index)
+    {
+        return bar+index;
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        int bar = foo.GetBar(4);
+    }
+}
+");
         }
 
         [Test]
-        public void TestSetter()
+        public void TestSet()
         {
+            Test<ConvertPropertyToMethodAction>(@"
+class Foo
+{
+    private int bar;
 
+    public int $Bar
+    {
+        set
+        {
+            bar = value;
+        }
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        foo.Bar = 5;
+    }
+}
+", @"
+class Foo
+{
+    public void SetBar(int value)
+    {
+        bar = value;
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        foo.SetBar(5);
+    }
+}
+");
         }
 
         [Test]
-        public void TestGetterAndSetter()
+        public void TestGetAndSetIndexer()
         {
+            Test<ConvertPropertyToMethodAction>(@"
+class Foo
+{
+    private int bar;
 
+    public int $Bar
+    {
+        get
+        {
+            return bar;
         }
 
-        [Test]
-        public void TestPrivate()
+        set
         {
-
+            bar = value;
         }
+    }
+}
 
-        [Test]
-        public void TestProtected()
-        {
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        foo.Bar = 5;
+        int baz = foo.Bar;
+    }
+}
+", @"
+class Foo
+{
+    public int GetBar()
+    {
+        return bar;
+    }
 
+    public void SetBar(int value)
+    {
+        bar = value;
+    }
+}
+
+class Bar
+{
+    public void Foo()
+    {
+        Foo foo = new Foo();
+        foo.SetBar(5);
+        int baz = foo.GetBar();
+    }
+}
+");
         }
 
         [Test]
         public void IgnoreAutoProperty()
         {
-
+            TestWrongContext<ConvertPropertyToMethodAction>(@"
+class Foo
+{
+    public int $Bar { get; set; }
+}
+");
         }
     }
 }
