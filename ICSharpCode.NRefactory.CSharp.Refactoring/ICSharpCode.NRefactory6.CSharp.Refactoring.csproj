@@ -98,7 +98,7 @@
     <Compile Include="..\ICSharpCode.NRefactory\Properties\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CodeActions\AddPartialModifierToMethodActions.cs" />
+    <Compile Include="CodeActions\AddPartialModifierToMethodAction.cs" />
     <Compile Include="CodeActions\AddStaticModifierToMethodAction.cs" />
     <Compile Include="CodeActions\ChangeParameterOrderAction.cs" />
     <Compile Include="CodeActions\AddAbstractModifierToBodiedMethodAction.cs" />
@@ -107,7 +107,6 @@
     <Compile Include="CodeActions\ConvertAutoPropertyToPropertyAction.cs" />
     <Compile Include="CodeActions\ConvertIndexerToMethodAction.cs" />
     <Compile Include="CodeActions\ConvertMethodToIndexerAction.cs" />
-    <Compile Include="CodeActions\ConvertMethodToPropertyAction.cs" />
     <Compile Include="CodeActions\ConvertPropertyToAutoPropertyAction.cs" />
     <Compile Include="CodeActions\ConvertPropertyToMethodAction.cs" />
     <Compile Include="CodeActions\ExtractBaseClassFromClassAction.cs" />
