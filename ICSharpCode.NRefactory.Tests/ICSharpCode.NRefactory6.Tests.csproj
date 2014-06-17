@@ -115,14 +115,11 @@
     </Compile>
     <Compile Include="CSharp\CodeActions\AddAbstractModifierToBodiedMethodTests.cs" />
     <Compile Include="CSharp\CodeActions\AddNewModifierToMethodTests.cs" />
-    <Compile Include="CSharp\CodeActions\AddPartialModifierToMethodTests.cs" />
     <Compile Include="CSharp\CodeActions\AddStaticModifierToMethodTests.cs" />
     <Compile Include="CSharp\CodeActions\ChangeParameterOrderTests.cs" />
     <Compile Include="CSharp\CodeActions\ConvertAutoPropertyToPropertyTests.cs" />
     <Compile Include="CSharp\CodeActions\ConvertAnonymousClassToClassTests.cs" />
     <Compile Include="CSharp\CodeActions\ConvertIndexerToMethodTests.cs" />
-    <Compile Include="CSharp\CodeActions\ConvertMethodToIndexerTests.cs" />
-    <Compile Include="CSharp\CodeActions\ConvertMethodToPropertyTests.cs" />
     <Compile Include="CSharp\CodeActions\ConvertPropertyToAutoPropertyTests.cs" />
     <Compile Include="CSharp\CodeActions\ConvertPropertyToMethodTests.cs" />
     <Compile Include="CSharp\CodeActions\ExtractBaseClassFromClassTests.cs" />

@@ -24,9 +24,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using ICSharpCode.NRefactory6.CSharp.CodeActions;
+using NUnit.Framework;
 namespace ICSharpCode.NRefactory.CSharp.CodeActions
 {
-    class MoveMemberUpInheritanceHierarchyTests
+    [TestFixture]
+    public class MoveMemberUpInheritanceHierarchyTests : ContextActionTestBase
     {
+        //Ignore non-derived class
+        //convert private to protected
+        //move variable
+        //move method
+        //move indexer
+        //move property
+
+        [Test]
+        public void IgnoreNonDerivedClass()
+        {
+
+        }
+
+        [Test]
+        public void ConvertPrivateToProtected()
+        {
+
+        }
+
+        [Test]
+        public void MoveVariable()
+        {
+
+        }
+
+        [Test]
+        public void MoveMethod()
+        {
+
+        }
+
+        [Test]
+        public void MoveIndexer()
+        {
+
+        }
+
+        [Test]
+        public void MoveProperty()
+        {
+
+        }
     }
 }
