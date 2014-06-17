@@ -31,6 +31,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
@@ -47,9 +48,31 @@ namespace ICSharpCode.NRefactory6.CSharp.Refactoring
     [ExportCodeRefactoringProvider("Convert method to an abstract method, preserving the method body.", LanguageNames.CSharp)]
     public class AddAbstractModifierToBodiedMethodAction : ICodeRefactoringProvider
     {
-        public Task<IEnumerable<CodeAction>> GetRefactoringsAsync(Document document, TextSpan span, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CodeAction>> GetRefactoringsAsync(Document document, TextSpan span, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
+            var token = root.FindToken(span.Start); //get our node
+            MethodDeclarationSyntax method = token.Parent as MethodDeclarationSyntax;
+            if(method == null)
+                return Enumerable.Empty<CodeAction>();
+
+            ClassDeclarationSyntax enclosingClass = method.Ancestors().Where(parent => parent.IsKind(SyntaxKind.ClassDeclaration)).First() as ClassDeclarationSyntax;
+            if(!enclosingClass.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.AbstractKeyword))) //if non-abstract class
+                return Enumerable.Empty<CodeAction>();
+
+            //so get the body content and copy to a comment node. Remove the braces
+            var body = method.Body.WithTrailingTrivia().ToString().Remove(0, 1);
+            body = body.Remove(body.Length - 1);
+            var comment = SyntaxFactory.Comment("/*" + body + "*/");
+            var leadingTrivia = SyntaxFactory.TriviaList(comment);
+            leadingTrivia.AddRange(method.GetLeadingTrivia());
+
+            //then remove the body
+            var modifiers = SyntaxFactory.TokenList(method.Modifiers.ToArray()).Add(SyntaxFactory.Token(SyntaxKind.AbstractKeyword));
+            MethodDeclarationSyntax newMethod = method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepLeadingTrivia).WithModifiers(modifiers)
+                .WithAdditionalAnnotations(Formatter.Annotation).WithLeadingTrivia(leadingTrivia);
+            SyntaxNode newRoot = root.ReplaceNode(method, newMethod.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+            return new[] { CodeActionFactory.Create(token.Span, DiagnosticSeverity.Info, "Convert method to abstract method, preserving the method body", document.WithSyntaxRoot(newRoot)) };
         }
     }
 }
