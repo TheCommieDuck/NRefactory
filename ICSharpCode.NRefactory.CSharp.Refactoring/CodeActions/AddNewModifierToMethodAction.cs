@@ -37,6 +37,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ICSharpCode.NRefactory6.CSharp.Refactoring;
 using Microsoft.CodeAnalysis.CSharp;
 using ICSharpCode.NRefactory6.CSharp;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace ICSharpCode.NRefactory6.CSharp.Refactoring
 {
@@ -47,9 +48,28 @@ namespace ICSharpCode.NRefactory6.CSharp.Refactoring
     [ExportCodeRefactoringProvider("Add the new modifier to a method.", LanguageNames.CSharp)]
     public class AddNewModifierToMethodAction : ICodeRefactoringProvider
     {
-        public Task<IEnumerable<CodeAction>> GetRefactoringsAsync(Document document, TextSpan span, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CodeAction>> GetRefactoringsAsync(Document document, TextSpan span, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
+            SemanticModel model = await document.GetSemanticModelAsync(cancellationToken);
+
+            var token = root.FindToken(span.Start); //get our node
+            MethodDeclarationSyntax method = token.Parent as MethodDeclarationSyntax;
+            if (method == null)
+                return Enumerable.Empty<CodeAction>(); //ignore non-methods
+            if (method.Modifiers.Any((modifier => modifier.IsKind(SyntaxKind.OverrideKeyword) || modifier.IsKind(SyntaxKind.VirtualKeyword))))
+                return Enumerable.Empty<CodeAction>(); //ignore overriding methods
+
+            String methodName = (token.Parent as MethodDeclarationSyntax).Identifier.Text;
+            var overrideMethod = model.LookupBaseMembers(span.Start).Where(m => m.IsVirtual && m.Name.Equals(methodName)).FirstOrDefault();
+            if(overrideMethod == null)
+                return Enumerable.Empty<CodeAction>(); //ignore methods that don't need new
+
+            //so now add new to the modifiers
+            var modifiers = SyntaxFactory.TokenList(method.Modifiers.ToArray()).Add(SyntaxFactory.Token(SyntaxKind.NewKeyword));
+            MethodDeclarationSyntax newMethod = method.WithModifiers(modifiers).WithAdditionalAnnotations(Formatter.Annotation);
+            SyntaxNode newRoot = root.ReplaceNode(method, newMethod);
+            return new[] { CodeActionFactory.Create(token.Span, DiagnosticSeverity.Info, "Add the new modifier to a method.", document.WithSyntaxRoot(newRoot)) };
         }
     }
 }

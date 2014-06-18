@@ -46,8 +46,7 @@ class Foo
     public void $Bar()
     {
     }
-}
-");
+}");
         }
 
         [Test]
@@ -66,8 +65,7 @@ class Baz : Foo
     public void $Bar_()
     {
     }
-}
-");
+}");
         }
 
         [Test]
@@ -83,11 +81,10 @@ class Foo
 
 class Baz : Foo
 {
-    public void $Bar_()
+    public void $Bar()
     {
     }
-}
-", @"
+}", @"
 class Foo
 {
     public virtual void Bar()
@@ -97,7 +94,7 @@ class Foo
 
 class Baz : Foo
 {
-    public new void Bar_()
+    public new void Bar()
     {
     }
 }");
@@ -116,11 +113,10 @@ class Foo
 
 class Baz : Foo
 {
-    public void $Bar_(int testParam)
+    public void $Bar(int testParam)
     {
     }
-}
-", @"
+}", @"
 class Foo
 {
     public virtual void Bar(int testParam)
@@ -130,11 +126,53 @@ class Foo
 
 class Baz : Foo
 {
-    public new void Bar_(int testParam)
+    public new void Bar(int testParam)
     {
     }
 }");
         }
-    }
 
+        [Test]
+        public void FurtherUpInheritanceTree()
+        {
+            Test<AddNewModifierToMethodAction>(@"
+class Foo
+{
+    public virtual void Bar(int testParam)
+    {
+    }
+}
+
+class Bar : Foo
+{
+}
+
+class Baz : Bar
+{
+    public void $Bar(int testParam)
+    {
+        int i = 5 + testParam;
+    }
+}", @"
+class Foo
+{
+    public virtual void Bar(int testParam)
+    {
+    }
+}
+
+class Bar : Foo
+{
+}
+
+class Baz : Bar
+{
+    public new void Bar(int testParam)
+    {
+        int i = 5 + testParam;
+    }
+}");
+        }
+
+    }
 }
