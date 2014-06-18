@@ -61,8 +61,10 @@ namespace ICSharpCode.NRefactory6.CSharp.Refactoring
                 return Enumerable.Empty<CodeAction>();
 
             //so get the body content and copy to a comment node. Remove the braces
-            var body = method.Body.WithTrailingTrivia().ToString().Remove(0, 1);
-            body = body.Remove(body.Length - 1);
+            var body = method.Body.WithTrailingTrivia().WithLeadingTrivia().ToString().Remove(0, 1);
+            body = body.Remove(body.Length - 1).Trim(' ', '\t')
+                .Replace(Environment.NewLine+"    ", Environment.NewLine).Replace(Environment.NewLine+"\t", Environment.NewLine); //this solves some formatting problems
+            //namely the body being indented one too far
             var comment = SyntaxFactory.Comment("/*" + body + "*/");
             var leadingTrivia = SyntaxFactory.TriviaList(comment);
             leadingTrivia.AddRange(method.GetLeadingTrivia());
@@ -70,7 +72,7 @@ namespace ICSharpCode.NRefactory6.CSharp.Refactoring
             //then remove the body
             var modifiers = SyntaxFactory.TokenList(method.Modifiers.ToArray()).Add(SyntaxFactory.Token(SyntaxKind.AbstractKeyword));
             MethodDeclarationSyntax newMethod = method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepLeadingTrivia).WithModifiers(modifiers)
-                .WithAdditionalAnnotations(Formatter.Annotation).WithLeadingTrivia(leadingTrivia);
+                .WithLeadingTrivia(leadingTrivia).WithAdditionalAnnotations(Formatter.Annotation);
             SyntaxNode newRoot = root.ReplaceNode(method, newMethod.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
             return new[] { CodeActionFactory.Create(token.Span, DiagnosticSeverity.Info, "Convert method to abstract method, preserving the method body", document.WithSyntaxRoot(newRoot)) };
         }

@@ -70,9 +70,9 @@ abstract class Foo
 {
     private int baz;
     /*
-            baz += 5;
-            return baz;
-        */
+        baz += 5;
+        return baz;
+    */
     public abstract int Bar();
 }
 ");
@@ -94,9 +94,9 @@ abstract class Foo
 abstract class Foo
 {
     /*
-            baz += 5;
-            return baz;
-        */
+        baz += 5;
+        return baz;
+    */
     public abstract int Bar(int baz);
 }
 ");
