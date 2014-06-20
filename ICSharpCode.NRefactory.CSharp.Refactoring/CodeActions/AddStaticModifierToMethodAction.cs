@@ -28,13 +28,17 @@ using ICSharpCode.NRefactory6.CSharp.Refactoring;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.FindSymbols;
 
 
 namespace ICSharpCode.NRefactory6.CSharp.Refactoring
@@ -46,9 +50,36 @@ namespace ICSharpCode.NRefactory6.CSharp.Refactoring
     [ExportCodeRefactoringProvider("Add the static modifier to a method.", LanguageNames.CSharp)]
     public class AddStaticModifierToMethodAction : ICodeRefactoringProvider
     {
-        public Task<IEnumerable<CodeAction>> GetRefactoringsAsync(Document document, TextSpan span, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CodeAction>> GetRefactoringsAsync(Document document, TextSpan span, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
+            SemanticModel model = await document.GetSemanticModelAsync(cancellationToken);
+
+            SyntaxToken token = root.FindToken(span.Start); //get our node
+            MethodDeclarationSyntax method = token.Parent as MethodDeclarationSyntax;
+            if (method == null)
+                return Enumerable.Empty<CodeAction>(); //ignore non-methods
+            if (method.Modifiers.Any(m => !(m.IsKind(SyntaxKind.PublicKeyword) || m.IsKind(SyntaxKind.PrivateKeyword) 
+                || m.IsKind(SyntaxKind.InternalKeyword) || m.IsKind(SyntaxKind.ProtectedKeyword))))
+                return Enumerable.Empty<CodeAction>(); //ignore any kind of special methods
+
+            //so now add static to the modifiers
+            SyntaxTokenList modifiers = SyntaxFactory.TokenList(method.Modifiers.ToArray()).Add(SyntaxFactory.Token(SyntaxKind.StaticKeyword));
+            MethodDeclarationSyntax newMethod = method.WithModifiers(modifiers).WithAdditionalAnnotations(Formatter.Annotation);
+
+            //and now we can replace all references
+            IMethodSymbol symbol = model.GetDeclaredSymbol(method, cancellationToken);
+            var references = await SymbolFinder.FindReferencesAsync(symbol, document.Project.Solution);
+            foreach(var reference in references)
+            {
+                foreach(var location in reference.Locations)
+                {
+                    var invocation = root.FindToken(location.Location.SourceSpan.Start).Parent.Parent.Parent.Parent;
+                }
+            }
+            return null;
+            //SyntaxNode newRoot = root.ReplaceNode(method, newMethod);
+            //return new[] { CodeActionFactory.Create(token.Span, DiagnosticSeverity.Info, "Add the static modifier to a method.", document.WithSyntaxRoot(newRoot)) };
         }
     }
 }

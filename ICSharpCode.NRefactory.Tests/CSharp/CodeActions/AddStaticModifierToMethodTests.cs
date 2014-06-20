@@ -54,8 +54,7 @@ class Foo
     {
         return 4;
     }
-}
-");
+}");
         }
 
         [Test]
@@ -75,8 +74,7 @@ class Foo
     {
         return bar;
     }
-}
-");
+}");
         }
 
         [Test]
@@ -97,47 +95,6 @@ class Bar
     {
         Foo foo = new Foo();
         foo.Bar();
-    }
-}
-", @"
-class Foo
-{
-    public static int $Bar()
-    {
-        return 4;
-    }
-}
-
-class Bar
-{
-    public void Baz()
-    {
-        Foo foo = new Foo();
-        Foo.Bar();
-    }
-}
-");
-        }
-
-        [Test]
-        public void AddInstanceVariablesAsParameters()
-        {
-            Test<AddStaticModifierToMethodAction>(@"
-class Foo
-{
-    public int something = 4;
-
-    public int $Bar()
-    {
-        return something;
-    }
-}
-
-class Bar
-{
-    public void Baz()
-    {
-        Foo foo = new Foo();
         foo.Bar();
     }
 }
@@ -155,6 +112,7 @@ class Bar
     public void Baz()
     {
         Foo foo = new Foo();
+        Foo.Bar();
         Foo.Bar();
     }
 }
@@ -203,6 +161,19 @@ class Bar
     }
 }
 ");
+        }
+
+        [Test]
+        public void IgnoreSpecialAccessorMethods()
+        {
+            TestWrongContext<AddStaticModifierToMethodAction>(@"
+class Foo
+{
+    public virtual int $Bar()
+    {
+        return 4;
+    }
+}");
         }
     }
 }
