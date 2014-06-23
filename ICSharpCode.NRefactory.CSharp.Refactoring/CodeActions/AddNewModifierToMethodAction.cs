@@ -53,20 +53,21 @@ namespace ICSharpCode.NRefactory6.CSharp.Refactoring
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
             SemanticModel model = await document.GetSemanticModelAsync(cancellationToken);
 
-            var token = root.FindToken(span.Start); //get our node
+            SyntaxToken token = root.FindToken(span.Start); //get our node
             MethodDeclarationSyntax method = token.Parent as MethodDeclarationSyntax;
             if (method == null)
                 return Enumerable.Empty<CodeAction>(); //ignore non-methods
             if (method.Modifiers.Any((modifier => modifier.IsKind(SyntaxKind.OverrideKeyword) || modifier.IsKind(SyntaxKind.VirtualKeyword))))
                 return Enumerable.Empty<CodeAction>(); //ignore overriding methods
 
+            //get the method name
             String methodName = (token.Parent as MethodDeclarationSyntax).Identifier.Text;
-            var overrideMethod = model.LookupBaseMembers(span.Start).Where(m => m.IsVirtual && m.Name.Equals(methodName)).FirstOrDefault();
+            ISymbol overrideMethod = model.LookupBaseMembers(span.Start).Where(m => m.IsVirtual && m.Name.Equals(methodName)).FirstOrDefault();
             if(overrideMethod == null)
                 return Enumerable.Empty<CodeAction>(); //ignore methods that don't need new
 
             //so now add new to the modifiers
-            var modifiers = SyntaxFactory.TokenList(method.Modifiers.ToArray()).Add(SyntaxFactory.Token(SyntaxKind.NewKeyword));
+            SyntaxTokenList modifiers = SyntaxFactory.TokenList(method.Modifiers.ToArray()).Add(SyntaxFactory.Token(SyntaxKind.NewKeyword));
             MethodDeclarationSyntax newMethod = method.WithModifiers(modifiers).WithAdditionalAnnotations(Formatter.Annotation);
             SyntaxNode newRoot = root.ReplaceNode(method, newMethod);
             return new[] { CodeActionFactory.Create(token.Span, DiagnosticSeverity.Info, "Add the new modifier to a method.", document.WithSyntaxRoot(newRoot)) };

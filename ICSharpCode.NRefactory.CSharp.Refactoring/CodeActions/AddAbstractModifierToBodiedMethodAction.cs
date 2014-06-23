@@ -61,16 +61,15 @@ namespace ICSharpCode.NRefactory6.CSharp.Refactoring
                 return Enumerable.Empty<CodeAction>();
 
             //so get the body content and copy to a comment node. Remove the braces
-            var body = method.Body.WithTrailingTrivia().WithLeadingTrivia().ToString().Remove(0, 1);
+            String body = method.Body.WithTrailingTrivia().WithLeadingTrivia().ToString().Remove(0, 1);
             body = body.Remove(body.Length - 1).Trim(' ', '\t')
                 .Replace(Environment.NewLine+"    ", Environment.NewLine).Replace(Environment.NewLine+"\t", Environment.NewLine); //this solves some formatting problems
             //namely the body being indented one too far
-            var comment = SyntaxFactory.Comment("/*" + body + "*/");
-            var leadingTrivia = SyntaxFactory.TriviaList(comment);
+            SyntaxTriviaList leadingTrivia = SyntaxFactory.TriviaList(SyntaxFactory.Comment("/*" + body + "*/"));
             leadingTrivia.AddRange(method.GetLeadingTrivia());
 
             //then remove the body
-            var modifiers = SyntaxFactory.TokenList(method.Modifiers.ToArray()).Add(SyntaxFactory.Token(SyntaxKind.AbstractKeyword));
+            SyntaxTokenList modifiers = SyntaxFactory.TokenList(method.Modifiers.ToArray()).Add(SyntaxFactory.Token(SyntaxKind.AbstractKeyword));
             MethodDeclarationSyntax newMethod = method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepLeadingTrivia).WithModifiers(modifiers)
                 .WithLeadingTrivia(leadingTrivia).WithAdditionalAnnotations(Formatter.Annotation);
             SyntaxNode newRoot = root.ReplaceNode(method, newMethod.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
