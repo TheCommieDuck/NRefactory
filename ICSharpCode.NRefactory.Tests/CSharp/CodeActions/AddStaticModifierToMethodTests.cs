@@ -50,7 +50,7 @@ class Foo
 }", @"
 class Foo
 {
-    public static int Bar()
+    public static int Bar(Foo foo)
     {
         return 4;
     }
@@ -67,100 +67,34 @@ class Foo
     {
         return bar;
     }
+}
+
+class Bar
+{
+    public void Baz()
+    {
+        Foo foo = new Foo();
+        foo.Bar(5);
+        foo.Bar(232);
+    }
 }", @"
 class Foo
 {
-    public static int Bar(int bar)
+    public static int Bar(Foo foo, int bar)
     {
         return bar;
     }
+}
+
+class Bar
+{
+    public void Baz()
+    {
+        Foo foo = new Foo();
+        Foo.Bar(foo, 5);
+        Foo.Bar(foo, 232);
+    }
 }");
-        }
-
-        [Test]
-        public void ContainingClassNotReferenced()
-        {
-            Test<AddStaticModifierToMethodAction>(@"
-class Foo
-{
-    public int $Bar()
-    {
-        return 4;
-    }
-}
-
-class Bar
-{
-    public void Baz()
-    {
-        Foo foo = new Foo();
-        foo.Bar();
-        foo.Bar();
-    }
-}
-", @"
-class Foo
-{
-    public static int Bar()
-    {
-        return 4;
-    }
-}
-
-class Bar
-{
-    public void Baz()
-    {
-        Foo foo = new Foo();
-        Foo.Bar();
-        Foo.Bar();
-    }
-}
-");
-        }
-
-        [Test]
-        public void ContainingClassReferenced()
-        {
-            Test<AddStaticModifierToMethodAction>(@"
-class Foo
-{
-    public int something = 4;
-
-    public int $Bar()
-    {
-        return something;
-    }
-}
-
-class Bar
-{
-    public void Baz()
-    {
-        Foo foo = new Foo();
-        foo.Bar();
-    }
-}
-", @"
-class Foo
-{
-    public int something = 4;
-
-    public static int Bar(Foo foo, int something)
-    {
-        return something;
-    }
-}
-
-class Bar
-{
-    public void Baz()
-    {
-        Foo foo = new Foo();
-        Foo.Bar(foo, foo.something);
-    }
-}
-");
         }
 
         [Test]
